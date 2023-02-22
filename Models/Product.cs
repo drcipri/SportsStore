@@ -10,6 +10,6 @@ namespace SportsStore.Models
        
         [Column(TypeName = "decimal(8,2)")]
         public decimal  Price { get; set; }
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
     }
 }

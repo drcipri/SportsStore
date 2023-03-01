@@ -4,9 +4,14 @@ namespace SportsStore.Components
 {
     public class NavigationMenuViewComponent: ViewComponent
     {
-        public string Invoke()
+        private IStoreRepository _storeRepository;
+        public NavigationMenuViewComponent(IStoreRepository storeRepository)
         {
-            return "Hello from the nav view componenet!";
+            _storeRepository = storeRepository;
+        }
+        public IViewComponentResult Invoke()
+        {
+            return View(_storeRepository.Products.Select(x => x.Category).Distinct().OrderBy(x => x));
         }
     }
 }

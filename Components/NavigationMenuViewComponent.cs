@@ -11,6 +11,7 @@ namespace SportsStore.Components
         }
         public IViewComponentResult Invoke()
         {
+            ViewBag.SelectedCategory = RouteData?.Values["category"];//"category" is the routing URL app.MapControllerRoute("category", "{category}", new { Controller = "Home", action = "Index", productPage = 1 });
             return View(_storeRepository.Products.Select(x => x.Category).Distinct().OrderBy(x => x));
         }
     }

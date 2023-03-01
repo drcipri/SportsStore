@@ -16,7 +16,9 @@ namespace SportsStore.Controllers
             return View(new ProductsListViewModel
             {
                 Products = _storeRepository.Products.Where(p => category == null || p.Category == category).OrderBy(p => p.ProductId).Skip((productPage - 1) * PageSize).Take(PageSize),
-                PagingInfo = new PagingInfo { CurrentPage = productPage, ItemsPerPage = PageSize, TotalItems = _storeRepository.Products.Count() },
+                PagingInfo = new PagingInfo { CurrentPage = productPage, 
+                                              ItemsPerPage = PageSize, 
+                                              TotalItems = category == null ? _storeRepository.Products.Count() : _storeRepository.Products.Where(x => x.Category == category).Count() },
                 CurrentCategory = category, 
             });
         }

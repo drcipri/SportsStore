@@ -8,13 +8,13 @@
         {
             CartLine? line = Lines.Where(p => p.Product.ProductId== product.ProductId).FirstOrDefault();
 
-            if(line != null)
+            if(line == null)
             {
                 Lines.Add(new CartLine { Product= product, Quantity = quantity });
             }
             else
             {
-                line.Quantity += quantity;
+                line!.Quantity += quantity;
             }
         }
 

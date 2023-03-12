@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 namespace SportsStore.Controllers
 {
     public class OrderController: Controller

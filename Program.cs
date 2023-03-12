@@ -9,15 +9,17 @@ builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 builder.Services.AddScoped<IOrderRepository, EfOrderRepository>();
 
 builder.Services.AddRazorPages();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
 builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddServerSideBlazor(); //create the services that blazor uses
+
 var app = builder.Build();
 
-//app.MapGet("/", () => "Hello World!");
 app.UseStaticFiles();
 app.UseSession();
 
@@ -30,5 +32,7 @@ app.MapDefaultControllerRoute();
 SeedData.EnsurePopulated(app);
 
 app.MapRazorPages();
+app.MapBlazorHub();//registers the blazor middleware components
+app.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");//ensure that blazor routing sistem work with the application
 
 app.Run();

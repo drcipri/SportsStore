@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<StoreDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration["ConnectionStrings:SportsStoreConnection"]));
+
+builder.Services.AddDbContext<AppIdentityDbContext>(opts =>
+opts.UseSqlServer(builder.Configuration["ConnectionStrings:IdentityConnection"]));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();    
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 builder.Services.AddScoped<IOrderRepository, EfOrderRepository>();
@@ -23,6 +29,9 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseSession();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllerRoute("catpage","{category}/Page{productPage:int}", new { Controller = "Home", action = "Index" });
 app.MapControllerRoute("page", "Page{productPage:int}", new { Controller = "Home", action = "Index", productPage = 1 });
 app.MapControllerRoute("category", "{category}", new { Controller = "Home", action = "Index", productPage = 1 });
@@ -30,6 +39,7 @@ app.MapControllerRoute("pagination", "Products/Page{productPage}", new { Control
 app.MapDefaultControllerRoute();
 
 SeedData.EnsurePopulated(app);
+IdentitySeedData.EnsurePopulated(app);
 
 app.MapRazorPages();
 app.MapBlazorHub();//registers the blazor middleware components
